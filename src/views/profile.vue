@@ -25,14 +25,31 @@
 <script>
 import SideNavi from '../components/SideNavi.vue'
 import Message from '../components/Message.vue'
+import axios from 'axios'
 
 export default {
   data(){
     return{
-      active:true,
-      name:'太郎',
-      profile:'私は太郎です',
+      active : true,
+      name : this.$store.state.user.name,
+      profile : this.$store.state.user.profile,
     };
+  },
+  methods:{
+    edit(){
+      if(!this.active){
+        axios 
+          .put("https://tranquil-fjord-01037.herokuapp.com/api/user" , {
+            email : this.$store.state.user.email,
+            profile : this.profile,
+          })
+          .then(response => {
+            this.$store.commit('changeData' , this.profile);
+            console.log(response);
+          });
+      }
+      this.active = !this.active;
+    }
   },
   components:{
     SideNavi,
